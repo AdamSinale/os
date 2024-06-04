@@ -1,5 +1,5 @@
 # Name of the executable
-TARGET = mync
+TARGET = mynetcat
 
 # Source files
 SRC = mync.c 

@@ -165,7 +165,9 @@ int start_tcp_client(const char *hostname, int port, char mode) {
 
 int main(int argc, char *argv[]){
     if (argc < 3){
-        fprintf(stderr, "Usage: %s -e <command> [-i TCPS<port>] [-o TCPC<host,port>] [-b TCPS<port>]\n", argv[0]);
+        fprintf(stderr, "Server Usage1: %s -e \"ttt 123456789\" -i TCPS4050\n", argv[0]);
+        fprintf(stderr, "Server Usage2: %s -e \"ttt 123456789\" -b TCPS4050\n", argv[0]);
+        fprintf(stderr, "Client Usage: %s -e \"ttt 123456789\" -o TCPClocalhost,4050\n", argv[0]);
         return 1;
     }
 
