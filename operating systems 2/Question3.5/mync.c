@@ -94,22 +94,22 @@ void relay_data(int input_fd, int output_fd) {
 
         // If data is available to read from input_fd
         if (FD_ISSET(input_fd, &read_fds)) {
-            int bytes_read = read(input_fd, buffer, sizeof(buffer) - 1);
+            int bytes_read = read(input_fd, buffer, sizeof(buffer) - 1);  // reads terminal input
             if (bytes_read <= 0) {
                 break;
             }
             buffer[bytes_read] = '\0';
-            write(output_fd, buffer, bytes_read);
+            write(output_fd, buffer, bytes_read); // shows one terminal's input into the other one's output
         }
 
         // If data is available to read from output_fd
         if (FD_ISSET(output_fd, &read_fds)) {
-            int bytes_read = read(output_fd, buffer, sizeof(buffer) - 1);
+            int bytes_read = read(output_fd, buffer, sizeof(buffer) - 1);  // reads terminal input
             if (bytes_read <= 0) {
                 break;
             }
             buffer[bytes_read] = '\0';
-            write(input_fd, buffer, bytes_read);
+            write(input_fd, buffer, bytes_read); // shows one terminal's input into the other one's output
         }
     }
 }
