@@ -56,10 +56,6 @@ int start_udp_server(int port, char mode, char args[9]) {
             case 'o':
                 dup2(server_fd, STDOUT_FILENO);
                 break;
-            case 'b':
-                dup2(server_fd, STDIN_FILENO);
-                dup2(server_fd, STDOUT_FILENO);
-                break;
         }
         close(server_fd);
 
