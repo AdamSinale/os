@@ -10,8 +10,9 @@
 #include <errno.h>
 #include <fcntl.h>
 
-int start_tcp_server(int port, char mode, char *args){
+int start_tcp_server(int port, char mode, char args[9]){
     printf("server received mode %c\n", mode);
+    printf("bot will play %s\n", args);
 
     int server_fd;
     struct sockaddr_in address;
@@ -50,7 +51,7 @@ int start_tcp_server(int port, char mode, char *args){
     printf("accepted with mode %c\n", mode);
     sleep(1);
 
-    write(new_socket, mode, 1);
+    // write(new_socket, mode, 1);
 
     pid_t pid = fork();
     if (pid < 0) {
@@ -75,7 +76,7 @@ int start_tcp_server(int port, char mode, char *args){
         }
         close(server_fd);
         
-        char *args1[] = {"ttt", "123456789", NULL};
+        char *args1[] = {"ttt", args, NULL};
         char *path = "../Question1/ttt";
         execvp(path, args1);
         printf("child came back\n");
@@ -172,17 +173,18 @@ int main(int argc, char *argv[]){
     char mode = *(argv[3] + 1);
     printf("mode: %c\n", mode);
     fflush(stdout);
-    char *command = NULL;
+    char command[9];
 
     for (int i = 1; i < argc; ++i){
         if (strcmp(argv[i], "-e") == 0 && i + 1 < argc){
-            command = argv[++i];
+            strncpy(command, argv[2] + 4, 10);
+            command[9] = '\0';
         }
         else if (strcmp(argv[i], "-i") == 0 && i + 1 < argc){
             printf("received i\n");
             if (strncmp(argv[i + 1], "TCPS", 4) == 0) {
                 int port = atoi(argv[++i] + 4);
-                start_tcp_server(port, mode, "22");
+                start_tcp_server(port, mode, command);
                 printf("starting server with port: %d", port);
             }
         }
@@ -199,12 +201,8 @@ int main(int argc, char *argv[]){
         else if (strcmp(argv[i], "-b") == 0 && i + 1 < argc){
             if (strncmp(argv[i + 1], "TCPS", 4) == 0){
                 int port = atoi(argv[++i] + 4);
-                both_fd = start_tcp_server(port, mode, "2443");
+                both_fd = start_tcp_server(port, mode, command);
             }
-        }
-        else{
-            fprintf(stderr, "Unknown option: %s\n", argv[i]);
-            return 1;
         }
     }
     dup2(both_fd, STDIN_FILENO);
